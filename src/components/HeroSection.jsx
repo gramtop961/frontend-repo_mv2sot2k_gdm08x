@@ -1,47 +1,39 @@
-import React, { useCallback } from 'react';
+import { useEffect } from 'react';
+import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
 import Spline from '@splinetool/react-spline';
-import { motion, useMotionValue, useSpring } from 'framer-motion';
-import PowerhouseText from './PowerhouseText';
-import OverlayGradients from './OverlayGradients';
-
-const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 
 export default function HeroSection() {
-  const scaleMv = useMotionValue(1);
-  const scale = useSpring(scaleMv, { stiffness: 140, damping: 24, mass: 0.6 });
+  const { scrollYProgress } = useScroll();
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 120,
+    damping: 20,
+    mass: 0.2,
+  });
+  const scale = useTransform(smoothProgress, [0, 1], [1, 1.25]);
 
-  const handleWheel = useCallback((e) => {
-    // Subtle zoom in/out on scroll
-    const delta = e.deltaY;
-    const current = scaleMv.get();
-    const next = clamp(current - delta * 0.0008, 0.85, 1.2);
-    scaleMv.set(next);
-  }, [scaleMv]);
+  // Prevent body overscroll bounce on touch for smoother exploration
+  useEffect(() => {
+    const handler = (e) => {
+      // Allow normal page scroll; no passive tweak here
+    };
+    window.addEventListener('touchmove', handler, { passive: true });
+    return () => window.removeEventListener('touchmove', handler);
+  }, []);
 
   return (
-    <section
-      className="relative min-h-screen w-full overflow-hidden bg-black text-white"
-      onWheel={handleWheel}
-      aria-label="Interactive 3D grid hero"
-    >
-      {/* 3D Scene */}
+    <section className="relative min-h-[92vh] w-full overflow-hidden bg-black text-white">
       <motion.div
         style={{ scale }}
-        className="absolute inset-0 will-change-transform"
+        className="absolute inset-0 z-10 cursor-grab active:cursor-grabbing"
       >
-        <div className="h-full w-full cursor-grab active:cursor-grabbing">
-          <Spline
-            scene="https://prod.spline.design/UngO8SNLfLcyPG7O/scene.splinecode"
-            style={{ width: '100%', height: '100%' }}
-          />
-        </div>
+        <Spline
+          scene="https://prod.spline.design/8Gm8c1rZ8R0N6B5w/scene.splinecode"
+          style={{ width: '100%', height: '100%' }}
+        />
       </motion.div>
 
-      {/* Centered Powerhouse Text */}
-      <PowerhouseText />
-
-      {/* Subtle gradient edges for contrast */}
-      <OverlayGradients />
+      {/* Fallback subtle grid background in case Spline fails to load */}
+      <div className="absolute inset-0 z-0 [background-image:linear-gradient(to_right,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:40px_40px]" />
     </section>
   );
 }

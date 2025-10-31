@@ -1,36 +1,32 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 
 export default function PowerhouseText() {
   return (
-    <div className="pointer-events-none absolute inset-0 z-10 grid place-items-center px-6 text-center">
-      <div className="max-w-5xl">
+    <div className="absolute inset-0 z-30 flex items-center justify-center text-center px-6">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 12 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+      >
         <motion.h1
-          initial={{ opacity: 0, scale: 0.6 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-          className="text-5xl md:text-7xl font-extrabold leading-tight bg-gradient-to-r from-indigo-300 via-fuchsia-300 to-cyan-300 bg-clip-text text-transparent drop-shadow-[0_0_20px_rgba(99,102,241,0.35)]"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15, duration: 0.8 }}
+          className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight"
         >
-          The Powerhouse of Possibilities
+          <span className="bg-clip-text text-transparent bg-gradient-to-br from-white via-white to-white/70">
+            Powerhouse
+          </span>
         </motion.h1>
         <motion.p
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6, duration: 0.8 }}
-          className="mt-4 text-base md:text-lg text-white/80"
+          transition={{ delay: 0.35, duration: 0.8 }}
+          className="mt-4 max-w-2xl mx-auto text-white/80"
         >
-          Explore a living grid of energy. Scroll to zoom. Click and drag to look around.
+          A dynamic 3D canvas you can explore. Scroll to zoom. Click and drag to look around.
         </motion.p>
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 1.2, duration: 0.7 }}
-          className="mt-8 flex items-center justify-center gap-3"
-        >
-          <span className="inline-flex h-2 w-2 animate-pulse rounded-full bg-fuchsia-400/80" />
-          <span className="text-sm md:text-base text-white/70">Interactive hero — optimized for performance</span>
-        </motion.div>
-      </div>
+      </motion.div>
     </div>
   );
 }
